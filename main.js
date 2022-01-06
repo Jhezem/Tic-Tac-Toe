@@ -11,7 +11,7 @@ const COMBINACIONES_GANAR = [
 
 const PLAYER_1 = "X";
 const PLAYER_2 = "0";
-let Turno1 = true;
+//let Turno1 = true;
 
 let player_actual = PLAYER_1;
 
@@ -34,26 +34,27 @@ function Terminar_Juego() {
         resultado.style.display = "none";
         celda.removeEventListener("click", jugada, { once: true })
     });
+    player_actual = PLAYER_1;
+};
+
+
+function jugada(celda){
+    let marcar = celda.target;
+    marcar.innerText = player_actual;
+
+    if(Checkear_Ganador(player_actual)){
+        Mostrar_Ganador(player_actual);
+    } else if (Empate()){
+        Mostrar_Empate();
+    }
+
+    Cambiar_Turnos();
 }
 
-function jugada(celda) {
-    let marcar = celda.target;
-    if (Turno1) {
-        marcar.innerText = PLAYER_1;
-        if (Checkear_Ganador(player_actual) || Empate()) {
-            Mostrar_Resultado(player_actual);
-        }
-        Turno1 = false;
-        player_actual = Turno1 ? PLAYER_1 : PLAYER_2
-    } else {
-        marcar.innerText = PLAYER_2;
-        if (Checkear_Ganador(player_actual) || Empate()) {
-            Mostrar_Resultado(player_actual);
-        }
-        Turno1 = true;
-        player_actual = Turno1 ? PLAYER_1 : PLAYER_2
-    }
-};
+function Cambiar_Turnos(){
+    return player_actual = player_actual == PLAYER_1 ? PLAYER_2 : PLAYER_1;
+
+}
 
 function Checkear_Ganador(player_actual) {
     return COMBINACIONES_GANAR.some(combinacion => {
@@ -69,19 +70,20 @@ function Empate() {
     })
 };
 
-function Mostrar_Resultado(player_actual) {
-    if (Empate()){
-        ganador.innerText = "HA HABIDO UN EMPATE";
-        resultado.style.display = "flex";
-    }
-    else if (player_actual === "X") {
+function Mostrar_Ganador(player_actual){
+    if (player_actual === "X") {
         ganador.innerText = "GANA EL PLAYER 1";
         resultado.style.display = "flex";
     } else if (player_actual === "0"){
         ganador.innerText = "GANA EL PLAYER 2";
         resultado.style.display = "flex";
     }
-}
+};
+
+function Mostrar_Empate() {
+        ganador.innerText = "HA HABIDO UN EMPATE";
+        resultado.style.display = "flex";
+};
 
 reiniciar.addEventListener("click", () => {
     Terminar_Juego();
