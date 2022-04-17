@@ -13,80 +13,80 @@ const PLAYER_1 = "X";
 const PLAYER_2 = "0";
 //let Turno1 = true;
 
-let player_actual = PLAYER_1;
+let playerActual = PLAYER_1;
 
 let celdas = document.querySelectorAll(".celdas");
 let resultado = document.querySelector(".resultado");
 let ganador = document.getElementById("ganador");
 let reiniciar = document.getElementById("restart");
 
-Iniciar_Juego();
+iniciarJuego();
 
-function Iniciar_Juego() {
+function iniciarJuego() {
     celdas.forEach(celda => {
         celda.addEventListener("click", jugada, { once: true })
     });
 };
 
-function Terminar_Juego() {
+function terminarJuego() {
     celdas.forEach(celda => {
         celda.innerText = "";
         resultado.style.display = "none";
         celda.removeEventListener("click", jugada, { once: true })
     });
-    player_actual = PLAYER_1;
+    playerActual = PLAYER_1;
 };
 
 
 function jugada(celda){
     let marcar = celda.target;
-    marcar.innerText = player_actual;
+    marcar.innerText = playerActual;
 
-    if(Checkear_Ganador(player_actual)){
-        Mostrar_Ganador(player_actual);
-    } else if (Empate()){
-        Mostrar_Empate();
+    if(checkearGanador(playerActual)){
+        mostrarGanador(playerActual);
+    } else if (empate()){
+        mostrarEmpate();
     }
 
-    Cambiar_Turnos();
+    cambiarTurnos();
 }
 
-function Cambiar_Turnos(){
-    return player_actual = player_actual == PLAYER_1 ? PLAYER_2 : PLAYER_1;
+function cambiarTurnos(){
+    return playerActual = playerActual == PLAYER_1 ? PLAYER_2 : PLAYER_1;
 
 }
 
-function Checkear_Ganador(player_actual) {
+function checkearGanador(playerActual) {
     return COMBINACIONES_GANAR.some(combinacion => {
         return combinacion.every(index => {
-            return celdas[index].innerText.includes(player_actual);
+            return celdas[index].innerText.includes(playerActual);
         });
     });
 };
 
-function Empate() {
+function empate() {
     return [...celdas].every(celda => {
         return celda.innerText.includes(PLAYER_1) || celda.innerText.includes(PLAYER_2);
     })
 };
 
-function Mostrar_Ganador(player_actual){
-    if (player_actual === "X") {
+function mostrarGanador(playerActual){
+    if (playerActual === "X") {
         ganador.innerText = "GANA EL PLAYER 1";
         resultado.style.display = "flex";
-    } else if (player_actual === "0"){
+    } else if (playerActual === "0"){
         ganador.innerText = "GANA EL PLAYER 2";
         resultado.style.display = "flex";
     }
 };
 
-function Mostrar_Empate() {
-        ganador.innerText = "HA HABIDO UN EMPATE";
+function mostrarEmpate() {
+        ganador.innerText = "HA HABIDO UN empate";
         resultado.style.display = "flex";
 };
 
 reiniciar.addEventListener("click", () => {
-    Terminar_Juego();
-    Iniciar_Juego();
+    terminarJuego();
+    iniciarJuego();
     Turno1 = true;
 });
